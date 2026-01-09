@@ -1,327 +1,362 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Energy Explorer – Trabalho e Energia</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Explorer – Trabalho e Energia</title>
 
-<style>
-:root{
---primary:#9c27b0;
---accent:#00d4ff;
---bg:#0a0a0c;
---card:#161b22;
---text:#f0f6fc;
-}
+    <style>
+        :root {
+            --primary: #9c27b0;
+            --accent: #00d4ff;
+            --bg: #0a0a0c;
+            --card: #161b22;
+            --text: #f0f6fc;
+        }
 
-body{
-margin:0;
-font-family:Inter,system-ui;
-background:var(--bg);
-color:var(--text);
-display:flex;
-flex-direction:column;
-align-items:center;
-}
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-header{
-width:100%;
-padding:35px;
-text-align:center;
-background:linear-gradient(180deg,#210535,var(--bg));
-border-bottom:2px solid var(--primary);
-}
+        header {
+            width: 100%;
+            padding: 35px;
+            text-align: center;
+            background: linear-gradient(180deg, #210535, var(--bg));
+            border-bottom: 2px solid var(--primary);
+        }
 
-.container{width:90%;max-width:720px;padding:20px}
+        .container { width: 90%; max-width: 650px; padding: 20px; }
 
-.card{
-background:var(--card);
-border-radius:16px;
-padding:24px;
-margin-bottom:30px;
-border:1px solid #30363d;
-box-shadow:0 10px 30px rgba(0,0,0,.5);
-}
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            border: 1px solid #30363d;
+            box-shadow: 0 10px 30px rgba(0,0,0,.5);
+        }
 
-h2{color:var(--accent)}
-p{font-size:.9rem;color:#8b949e;line-height:1.5}
-label{display:block;margin-top:10px;font-size:.85rem}
+        h2 { color: var(--accent); margin-top: 0; }
+        p { font-size: 0.9rem; color: #8b949e; }
+        label { font-size: .85rem; color: #ccc; display: block; margin-top: 10px; }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 15px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: white;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
 
-input, select {
-width: 100%;
-padding: 12px;
-margin: 8px 0;
-border-radius: 8px;
-border: 1px solid #37474f;
-background: #263238;
-color: #fff;
-box-sizing: border-box;
-font-size: 1rem;
-}
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
+        button:hover { background: #7b1fa2; }
 
-button{
-width:100%;
-padding:12px;
-margin-top:15px;
-background:var(--primary);
-border:none;
-border-radius:8px;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
+        /* Padronizado para todas as fases */
+        .result {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #1c2128;
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
 
-button:hover{background:#7b1fa2}
-
-.result{
-display:none;
-margin-top:15px;
-padding:15px;
-background:#1c2128;
-border-left:4px solid var(--accent);
-border-radius:8px;
-}
-
-.badge{
-background:#000;
-padding:12px;
-border-radius:8px;
-margin-bottom:20px;
-text-align:center;
-border:1px solid var(--primary);
-font-weight:bold;
-}
-
-canvas{
-background:#0d1117;
-border-radius:10px;
-margin-top:15px;
-}
-.box-pedagogico {
-  background:#1c2128;
-  border-left:4px solid var(--accent);
-  padding: 10px;
-  margin-top: 15px;
-}
-</style>
+        .badge {
+            background: #000;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            border: 1px solid var(--primary);
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
-<h1>🔋 Energy Explorer</h1>
-<p>Trabalho, Energia e Movimento</p>
+    <h1>🔋 Energy Explorer</h1>
+    <p>Simulador de Trabalho, Energia e Movimento</p>
 </header>
 
 <div class="container">
 
-<div class="badge">
-⭐ Pontos: <span id="pontos">0</span> | 🎖️ Nível: <span id="nivel">1</span>
-</div>
+    <div class="badge">
+        ⭐ Pontos: <span id="pontos">0</span> | 🎖️ Nível: <span id="nivel">1</span>
+    </div>
 
-<!-- ================= FASE 0 ================= -->
-<div class="card">
-<h2>🔴 Fase 0 – Trabalho de uma Força Inclinada</h2>
-<p>
-Quando uma força atua com um certo ângulo em relação ao deslocamento,
-apenas sua <strong>componente paralela</strong> realiza trabalho:
-</p>
-<p><strong>W = F · d · cosθ</strong></p>
-
-<label>Força (N)</label>
-<input id="F0" type="number" placeholder="Ex: 20" step="1">
-
-<label>Ângulo da força (graus)</label>
-<input id="ang0" type="number" placeholder="Ex: 60" step="5">
-
-<label>Deslocamento (m)</label>
-<input id="d0" type="number" placeholder="Ex: 5" step="0.5">
-
-<button onclick="fase0()">Calcular</button>
-
-
-<div class="box-pedagogico">
-Nesta fase, analisamos o trabalho realizado por uma força aplicada formando um ângulo θ em relação à direção do deslocamento do objeto.
-<br><br>
-Apenas a componente da força paralela ao deslocamento é capaz de realizar trabalho mecânico. 
-<br><br>
-Essa componente é dada por:
-<br><br>
-<b>Fx = F · cos(θ)</b>
-<br><br>
-Portanto, o trabalho mecânico realizado pela força é expresso por:
-<br><br>
-<b>W = F · d · cos(θ)</b>
-</div>
-<div id="r0" class="result"></div>
-
-<!-- <canvas id="g0" width="600" height="200"></canvas> -->
-</div>
-
-<!-- ================= FASE 1 ================= -->
-<div class="card">
-<h2>🟡 Fase 1 – Plano Inclinado com Atrito</h2>
-<p>
-No plano inclinado, o peso favorece o movimento enquanto o atrito
-atua no sentido contrário, realizando <strong>trabalho negativo</strong>.
-</p>
-
-<label>Massa (kg)</label>
-<input id="m1" type="number" placeholder="Ex: 2" step="0.1">
-
-<label>Ângulo do plano (graus)</label>
-<input id="ang1" type="number" placeholder="Ex: 30" step="0.5">
-
-<label>Comprimento (m)</label>
-<input id="d1" type="number" placeholder="Ex: 4" step="0.5">
-
-<label>Coeficiente de atrito</label>
-<input id="mu1" type="number" placeholder="Ex: 0.20" step="0.05">
-
-<button onclick="fase1()">Calcular</button>
-<div id="r1" class="result"></div>
-
-
-<div class="box-pedagogico">
-Nesta fase, precisamos decompor todas as forças para calculamos o trabalho total (<strong>W<sub>total</sub> ).
-<br><br>
-Força Peso:
-<br><br>
-<b>Px = m · g · sen(θ)</b>
-<br><br>
-<b>Py = m · g · cos(θ)</b>
-<br><br>
-Força Normal:
-<br><br>
-<b>N = Py = m · g · sen(θ)</b>
-<br><br>
-Força de Atrito:
-<br><br>
-<b>F<sub>fat</sub> = mu · N = mu · m · g · sen(θ)</b>
-<br><br>
-Trabalho Total:
-<br><br>
-<b><strong>W<sub>total</sub> = W<sub>Px</sub> · d  +  W<sub>P<sub>fat</sub></sub> · d</b>
-</div>
-  
-<!-- <canvas id="g1" width="600" height="200"></canvas> -->
-</div>
-
-<!-- ================= FASE 2 ================= -->
     <div class="card">
-        <h2>🟢 Fase 2 – Teorema Trabalho–Energia</h2>
-        <p>A variação da energia cinética é igual ao trabalho total.</p>
+        <h2>🧗 Fase 0 – Trabalho de Uma Força</h2>
+        <p>Trabalho da Força aplicada na mesma direção e sentido do deslocamento (W = F · d).</p>
+        <label>Força (N)</label>
+        <input type="number" id="F0" placeholder="Ex: 20" step="1">
+         <label>Deslocamento (m)</label>
+        <input type="number" id="d0" placeholder="Ex: 5" step="1">
+        <button onclick="fase0()">Calcular Trabalho</button>
+        <div id="r0" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>🛒 Fase 1 – Trabalho Geral</h2>
+        <p>Somente a componente da força paralela ao deslocamento realiza trabalho.</p>
+        <label>Força (N)</label>
+        <input type="number" id="F1" placeholder="Ex: 20" step="1">
+        <label>Ângulo (graus)</label>
+        <input type="number" id="ang1" placeholder="Ex: 60" step="1">
+        <label>Deslocamento (m)</label>
+        <input type="number" id="d1" placeholder="Ex: 5" step="1">
+        <button onclick="fase1()">Calcular Trabalho</button>
+        <div id="r1" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>🏂 Fase 2 – Plano Inclinado sem Atrito</h2>
+        <img src="img/plano_inclinado.png" class="figura"
+         alt="Corpo de massa m , deslizando, sem atrito, sobre um plano inclinado">
+        <p>Considere a situação representada na figura. Calcular o trabalho da força peso de um bloco que está deslizando sobre um plano com inclinação α, g=10 m/s<sup>2</sup>.</p>
         <label>Massa (kg)</label>
-        <input type="number" id="m2" placeholder="Ex: 1" step="0.1">
-        <label>Velocidade inicial (m/s)</label>
-        <input type="number" id="vi_input" placeholder="Ex: 2" step="0.1">
-        <label>Velocidade final (m/s)</label>
-        <input type="number" id="vf_input" placeholder="Ex: 8" step="0.1">
-        <button onclick="fase2()">Analisar Energia</button>
+        <input type="number" id="m2" placeholder="Ex: 2" step="1">
+        <label>Ângulo do plano (°)</label>
+        <input type="number" id="ang2" placeholder="Ex: 30" step="1">
+        <label>Deslocamento (m)</label>
+        <input type="number" id="d2" placeholder="Ex: 4" step="1">
+        <button onclick="fase2()">Executar Missão</button>
         <div id="r2" class="result"></div>
     </div>
 
+    <div class="card">
+        <h2>⛷️ Fase 3 – Aceleração de um Bloco em um Plano Inclinado sem Atrito</h2>
+        <img src="img/plano_inclinado_decomposicao.png" class="figura"
+         alt="Corpo de massa m, deslizando, sem atrito, sobre um plano inclinado">
+        <p>Considere a situação representada na figura. A aceleração de um corpo de massa m, que desliza sobre um plano inclinado sem <strong>atrito</strong>, g=10 m/s<sup>2</sup>.</p>
+        <label>Massa (kg)</label>
+        <input type="number" id="m3" placeholder="Ex: 3" step="1">
+        <label>Ângulo do plano (°)</label>
+        <input type="number" id="ang3" placeholder="Ex: 20" step="1">
+        <button onclick="fase3()">Executar Missão</button>
+        <div id="r3" class="result"></div>
+        <p>🤔 A aceleração do bloco depende da sua massa? Volte à teoria se ainda estiver com dúvidas quanto aos cálculos!</p>
+    </div>
+
+    <div class="card">
+        <h2>↘️ Fase 4 – Plano Inclinado com Atrito</h2>
+        <p>Considere que o bloco <strong>descendo</strong> ao longo do plano com <strong>atrito</strong>, g=10 m/s<sup>2</sup>.</p>
+        <img src="img/plano_inclinado_decomposicao_1.png" class="figura"
+         alt="Corpo de massa m, deslizando, com atrito, sobre um plano inclinado">
+        <label>Massa (kg)</label>
+        <input type="number" id="m4" placeholder="Ex: 2" step="1">
+        <label>Ângulo do plano (°)</label>
+        <input type="number" id="ang4" placeholder="Ex: 25" step="1">
+        <label>Deslocamento (m)</label>
+        <input type="number" id="d4" placeholder="Ex: 4" step="1">
+        <label>Coeficiente de atrito cinético(μ)</label>
+        <input type="number" id="mu4" placeholder="Ex: 0.2" step="0.05">
+        <button onclick="fase4()">Executar Missão - Calcular o Trabalho Total</button>
+        <div id="r4" class="result"></div>
+        <p>🤔 O resultado é o que você esperava? Volte à teoria se ainda estiver com dúvidas quanto aos cálculos!</p>
+    </div>
+
+    <div class="card">
+        <h2>↖️ Fase 5 – Plano Inclinado com Atrito</h2>
+        <p>Considere que o bloco está <strong>subindo</strong> ao longo do plano com <strong>atrito</strong>, g=10 m/s<sup>2</sup>.</p>
+        <img src="img/plano_inclinado_decomposicao_1.png" class="figura"
+         alt="Corpo de massa m, deslizando, com atrito, sobre um plano inclinado">
+        <label>Massa (kg)</label>
+        <input type="number" id="m5" placeholder="Ex: 2" step="1">
+        <label>Ângulo do plano (°)</label>
+        <input type="number" id="ang5" placeholder="Ex: 20" step="1">
+        <label>Deslocamento (m)</label>
+        <input type="number" id="d5" placeholder="Ex: 4" step="1">
+        <label>Coeficiente de atrito (μ)</label>
+        <input type="number" id="mu5" placeholder="Ex: 0.2" step="0.05">
+        <button onclick="fase5()">Executar Missão </button>
+        <div id="r5" class="result"></div>
+        <p>🤔 O resultado é o que você esperava? Volte à teoria se ainda estiver com dúvidas quanto aos cálculos!</p>
+    </div>
+
+    <div class="card">
+        <h2>🏎️ Fase 6 – Energia Cinética</h2>
+        <p>Energia de um corpo em movimento saindo do repouso.</p>
+        <label>Massa do veículo (kg):</label>
+        <input type="number" id="massaC" placeholder="Ex: 1000" step="1">
+        <label>Velocidade Final (m/s):</label>
+        <input type="number" id="velC" placeholder="Ex: 20" step="1">
+        <button onclick="calcCinetica()">Calcular Energia Gasta</button>
+        <div id="resC" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>🏗️ Fase 7 – Energia Potencial</h2>
+        <p>Energia armazenada devido à altura (gravitacional), g=10 m/s<sup>2</sup></p>
+        <label>Massa do objeto (kg):</label>
+        <input type="number" id="massaP" placeholder="Ex: 10" step="1">
+        <label>Altura (m):</label>
+        <input type="number" id="altP" placeholder="Ex: 5" step="1">
+        <button onclick="calcPotencial()">Calcular Energia Armazenada</button>
+        <div id="resP" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>🚵 Fase 8 – Teorema Trabalho–Energia</h2>
+        <p>A variação da energia cinética é igual ao trabalho total. </p>
+        <label>Massa (kg)</label>
+        <input type="number" id="m8" placeholder="Ex: 1" step="0.5">
+        <label>Velocidade inicial (m/s)</label>
+        <input type="number" id="vi_input" placeholder="Ex: 2" step="0.5">
+        <label>Velocidade final (m/s)</label>
+        <input type="number" id="vf_input" placeholder="Ex: 8" step="0.5">
+        <button onclick="fase8()">Analisar Energia</button>
+        <div id="r8" class="result"></div>
+    </div>
 
 <button onclick="resetar()">🔄 Resetar Simulação</button>
 
 </div>
 
 <script>
-let pontos=0;
-const pontosSpan=document.getElementById("pontos");
-const nivelSpan=document.getElementById("nivel");
+    let pontos = 0;
+    const pontosSpan = document.getElementById("pontos");
+    const nivelSpan = document.getElementById("nivel");
 
-function atualizar(){
-pontosSpan.textContent=pontos;
-nivelSpan.textContent=Math.floor(pontos/30)+1;
-}
+    function atualizar() {
+        pontosSpan.textContent = pontos;
+        nivelSpan.textContent = Math.floor(pontos / 30) + 1;
+    }
 
-/* ===== FASE 0 ===== */
-function fase0(){
-let F=+F0.value;
-let a=+ang0.value*Math.PI/180;
-let d=+d0.value;
+    function fase0() {
+        let F = parseFloat(document.getElementById("F0").value);
+        let d = parseFloat(document.getElementById("d0").value);
+        let W = F * d;
+        pontos += 10; atualizar();
+        let r0 = document.getElementById("r0");
+        r0.style.display = "block";
+        r0.innerHTML = `<strong>F:</strong> ${F.toFixed(2)} N<br><strong>Trabalho:</strong> ${W.toFixed(2)} J<br><br>`;
+    }
 
-let Fx=F*Math.cos(a);
-let W=Fx*d;
+    function fase1() {
+        let F = parseFloat(document.getElementById("F1").value);
+        let ang = parseFloat(document.getElementById("ang1").value) * Math.PI / 180;
+        let d = parseFloat(document.getElementById("d1").value);
+        let Fx = F * Math.cos(ang);
+        let W = Fx * d;
+        pontos += 10; atualizar();
+        let r1 = document.getElementById("r1");
+        r1.style.display = "block";
+        r1.innerHTML = `<strong>Fx:</strong> ${Fx.toFixed(2)} N<br><strong>Trabalho:</strong> ${W.toFixed(2)} J<br><br>🧠 Trabalho ${W > 0 ? "Motor" : "Resistente"}.`;
+    }
 
-pontos+=10; atualizar();
-r0.style.display="block";
-r0.innerHTML=`
-Fx = ${Fx.toFixed(2)} N<br>
-W = ${W.toFixed(2)} J<br><br>
-🧠 Trabalho ${W>0?"motor":"resistente"}.
-`;
 
-/* desenharGrafico(g0,[0,d],[0,W]); */
-}
-
-/* ===== FASE 1 ===== */
-function fase1(){
-let m=+m1.value;
-let a=+ang1.value*Math.PI/180;
-let d=+d1.value;
-let mu=+mu1.value;
-let g=9.8;
-
-let Wp=m*g*Math.sin(a)*d;
-let Wat=-mu*m*g*Math.cos(a)*d;
-let Wt=Wp+Wat;
-
-pontos+=15; atualizar();
-r1.style.display="block";
-r1.innerHTML=`
-Trabalho da Força Peso<br>
-W peso = ${Wp.toFixed(2)} J<br><br>
-Trabalho da Força de Atrito<br>
-W atrito = ${Wat.toFixed(2)} J<br><br>
-Trabalho Total<br>
-<strong>W total = ${Wt.toFixed(2)} J</strong>
-`;
-
-/* desenharBarras(g1,["Peso","Atrito"],[Wp,Wat]); */
-}
-
-/* ===== FASE 2 ===== */
-   function fase2() {
+    function fase2() {
         let m = parseFloat(document.getElementById("m2").value);
+        let a = parseFloat(document.getElementById("ang2").value) * Math.PI / 180;
+        let d = parseFloat(document.getElementById("d2").value);
+        let g = 10.0;
+        let Fp = m * g * Math.sin(a);
+        let Wp = Fp * d;
+        pontos += 10; atualizar();
+        let r2 = document.getElementById("r2");
+        r2.style.display = "block";
+        r2.innerHTML = `<strong>W Peso:</strong> ${Wp.toFixed(2)} J`;
+    }
+
+    function fase3() {
+        let m = parseFloat(document.getElementById("m3").value);
+        let a = parseFloat(document.getElementById("ang3").value) * Math.PI / 180;
+        let g = 10.0;
+        let ac = g * Math.sin(a);
+        pontos += 15; atualizar();
+        let r3 = document.getElementById("r3");
+        r3.style.display = "block";
+        r3.innerHTML = `<strong>a<sub>x</sub>:</strong> ${ac.toFixed(2)} J`;
+    }
+
+    function fase4() {
+        let m = parseFloat(document.getElementById("m4").value);
+        let a = parseFloat(document.getElementById("ang4").value) * Math.PI / 180;
+        let d = parseFloat(document.getElementById("d4").value);
+        let mu = parseFloat(document.getElementById("mu4").value);
+        let g = 10.0;
+        let Fp = m * g * Math.sin(a);
+        let Fat = mu * (m * g * Math.cos(a));
+        let Wp = Fp * d;
+        let Wat = -Fat * d;
+        pontos += 15; atualizar();
+        let r4 = document.getElementById("r4");
+        r4.style.display = "block";
+        r4.innerHTML = `<strong>W Peso:</strong> ${Wp.toFixed(2)} J<br><strong>W Atrito:</strong> ${Wat.toFixed(2)} J<br><strong>Total:</strong> ${(Wp + Wat).toFixed(2)} J`;
+    }
+
+    function fase5() {
+        let m = parseFloat(document.getElementById("m5").value);
+        let a = parseFloat(document.getElementById("ang5").value) * Math.PI / 180;
+        let d = parseFloat(document.getElementById("d5").value);
+        let mu = parseFloat(document.getElementById("mu5").value);
+        let g = 10.0;
+        let Fp = m * g * Math.sin(a);
+        let Fat = mu * (m * g * Math.cos(a));
+        let Wp = -Fp * d;
+        let Wat = -Fat * d;
+        pontos += 15; atualizar();
+        let r5 = document.getElementById("r5");
+        r5.style.display = "block";
+        r5.innerHTML = `<strong>W Peso:</strong> ${Wp.toFixed(2)} J<br><strong>W Atrito:</strong> ${Wat.toFixed(2)} J<br><strong>Total:</strong> ${(Wp + Wat).toFixed(2)} J`;
+    }
+
+    function fase8() {
+        let m = parseFloat(document.getElementById("m8").value);
         let vi = parseFloat(document.getElementById("vi_input").value);
         let vf = parseFloat(document.getElementById("vf_input").value);
         let Ei = 0.5 * m * vi * vi;
         let Ef = 0.5 * m * vf * vf;
-        pontos += 10; atualizar();
-        let r2 = document.getElementById("r2");
-        r2.style.display = "block";
-        r2.innerHTML = `
-            Ec inicial = ${Ei.toFixed(2)} J<br>
-            Ec final = ${Ef.toFixed(2)} J<br><br>
-            <strong>ΔE (Trabalho Total):</strong> ${(Ef - Ei).toFixed(2)} J`;
+        pontos += 15; atualizar();
+        let r8 = document.getElementById("r8");
+        r8.style.display = "block";
+        r8.innerHTML = `<strong>ΔE (Trabalho Total):</strong> ${(Ef - Ei).toFixed(2)} J`;
     }
 
+    function calcCinetica() {
+        const m = parseFloat(document.getElementById('massaC').value);
+        const v = parseFloat(document.getElementById('velC').value);
+        const ec = (m * Math.pow(v, 2)) / 2;
+        pontos += 10; atualizar();
+        const res = document.getElementById('resC');
+        res.style.display = 'block';
+        res.innerHTML = `<strong>Energia Cinética:</strong> ${ec.toLocaleString()} J`;
+    }
 
-/* ===== GRÁFICOS ===== */
-function desenharGrafico(canvas,x,y){
-let c=canvas.getContext("2d");
-c.clearRect(0,0,600,200);
-c.beginPath();
-c.moveTo(50,150);
-c.lineTo(550,150-y[1]/Math.max(...y)*120);
-c.strokeStyle="#00d4ff";
-c.lineWidth=3;
-c.stroke();
-}
-
-function desenharBarras(canvas,labels,values){
-let c=canvas.getContext("2d");
-c.clearRect(0,0,600,200);
-let max=Math.max(...values.map(v=>Math.abs(v)));
-values.forEach((v,i)=>{
-let h=v/max*80;
-c.fillStyle="#00d4ff";
-c.fillRect(100+i*200,120-h,60,h);
-});
-}
+    function calcPotencial() {
+        const m = parseFloat(document.getElementById('massaP').value);
+        const h = parseFloat(document.getElementById('altP').value);
+        const ep = m * 10.0 * h;
+        pontos += 10; atualizar();
+        const res = document.getElementById('resP');
+        res.style.display = 'block';
+        res.innerHTML = `<strong>Energia Potencial:</strong> ${ep.toFixed(1)} J`;
+    }
 
 /* ===== RESET ===== */
 function resetar(){
