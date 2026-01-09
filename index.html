@@ -179,6 +179,9 @@ atua no sentido contrário, realizando <strong>trabalho negativo</strong>.
 <label>Coeficiente de atrito</label>
 <input id="mu1" type="number" placeholder="Ex: 0.20" step="0.05">
 
+<button onclick="fase1()">Calcular</button>
+<div id="r1" class="result"></div>
+
 
 <div class="box-pedagogico">
 Nesta fase, precisamos decompor todas as forças para calculamos o trabalho total (<strong>W<sub>total</sub> ).
@@ -200,11 +203,8 @@ Força de Atrito:
 Trabalho Total:
 <br><br>
 <b><strong>W<sub>total</sub> = W<sub>Px</sub> · d  +  W<sub>P<sub>fat</sub></sub> · d</b>
-
 </div>
-
-<button onclick="fase1()">Calcular</button>
-<div id="r1" class="result"></div>
+  
 <canvas id="g1" width="600" height="200"></canvas>
 </div>
 
@@ -254,7 +254,7 @@ W = ${W.toFixed(2)} J<br><br>
 🧠 Trabalho ${W>0?"motor":"resistente"}.
 `;
 
-desenharGrafico(g0,[0,d],[0,W]);
+/* desenharGrafico(g0,[0,d],[0,W]); */
 }
 
 /* ===== FASE 1 ===== */
@@ -280,7 +280,7 @@ Trabalho Total<br>
 <strong>W total = ${Wt.toFixed(2)} J</strong>
 `;
 
-desenharBarras(g1,["Peso","Atrito"],[Wp,Wat]);
+/* desenharBarras(g1,["Peso","Atrito"],[Wp,Wat]); */
 }
 
 /* ===== FASE 2 ===== */
